@@ -68,6 +68,7 @@ function App() {
 
   useEffect(() => {
     const parsed = {
+      // page, limit, search la nhung bien GET do mockAPI cung cap, ta phai viet dung nhu vay
       page: info.currentPage,
       limit: info.limit,
       search: info.name_like
