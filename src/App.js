@@ -5,6 +5,7 @@ import Functions from "./services/Functions";
 import "./App.css";
 
 import List from "./components/List";
+import FormSearch from "./components/FormSearch";
 
 function App() {
 
@@ -13,9 +14,10 @@ function App() {
     currentPage: 1,
     itemsPerPage: [],
     limit: 10,
-    activeDisabled: false,
-    disablePrevious: false,
-    disableNext: false
+    name_like: '',
+    // activeDisabled: false,
+    // disablePrevious: false,
+    // disableNext: false
   });
 
   let btnPrevious = React.createRef()
@@ -37,7 +39,7 @@ function App() {
     //   }
   
    
-    setInfo({ ...info, currentPage: info.currentPage - 1, activeDisabled: true })
+    setInfo({ ...info, currentPage: info.currentPage - 1 })
   
   }
   function handleNext (e) {
@@ -53,8 +55,13 @@ function App() {
     //   setInfo({ ...info, disableNext: true})
     // }
   
-    setInfo({ ...info, currentPage: info.currentPage + 1, activeDisabled: true })
+    setInfo({ ...info, currentPage: info.currentPage + 1 })
    
+  }
+
+  function handleSearch (strSearch) {
+    console.log(strSearch)
+    setInfo({ ...info, currentPage: 1, name_like: strSearch })
   }
 
 
@@ -63,6 +70,7 @@ function App() {
     const parsed = {
       page: info.currentPage,
       limit: info.limit,
+      search: info.name_like
     };
     console.log('parsed',parsed)
     const stringified = queryString.stringify(parsed);
@@ -81,11 +89,12 @@ function App() {
         console.log(err);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [info.currentPage])
+  }, [info.currentPage, info.name_like])
 
 
   return (
     <div className="App">
+      <FormSearch propSearch={handleSearch} />
       <List data={info.itemsPerPage} />
       <div className="group">
         <button ref={btnPrevious} disabled={info.currentPage === 1} onClick={handlePrevious}>Previous</button>
