@@ -13,27 +13,51 @@ function App() {
     currentPage: 1,
     itemsPerPage: [],
     limit: 10,
+    activeDisabled: false,
     disablePrevious: false,
     disableNext: false
   });
 
+  let btnPrevious = React.createRef()
+  let btnNext = React.createRef()
+
   function handlePrevious () {
-    // debugger
-    if (info.currentPage <= 0) {
-      setInfo({ ...info, disablePrevious: true})
-    } else {
-      setInfo({ ...info, currentPage: info.currentPage - 1, disablePrevious: false})
-    }
-    
+    // cach te nhat lam lùi quá số 1 và khi next thì ko bỏ disable nút dc
+    // if (info.currentPage <= 0) {
+    //   setInfo({ ...info, disablePrevious: true})
+    // } else {
+    //   setInfo({ ...info, currentPage: info.currentPage - 1, disablePrevious: false})
+    // }
+
+    // cách này fix dc vấn đề lùi quá số 1, nhưng vấn đề đứng tại số 1 mà button ko bị disable đc. và khi next thì ko bỏ disable nút dc
+    // if (info.currentPage > 1) {
+    //     setInfo({ ...info, currentPage: info.currentPage - 1, disablePrevious: false})
+    //   } else {
+    //     setInfo({ ...info, disablePrevious: true})
+    //   }
+  
+   
+    setInfo({ ...info, currentPage: info.currentPage - 1, activeDisabled: true })
+  
   }
-  function handleNext () {
-    if (info.currentPage >= info.totalPage) {
-      setInfo({ ...info, disableNext: true})
-    } else {
-      setInfo({ ...info, currentPage: info.currentPage + 1, disableNext: false})
-    }
-    
+  function handleNext (e) {
+    // if (info.currentPage >= info.totalPage) {
+    //   setInfo({ ...info, disableNext: true})
+    // } else {
+    //   setInfo({ ...info, currentPage: info.currentPage + 1, disableNext: false})
+    // }
+
+    // if (info.currentPage < info.totalPage) {
+    //   setInfo({ ...info, currentPage: info.currentPage + 1, disableNext: false})
+    // } else {
+    //   setInfo({ ...info, disableNext: true})
+    // }
+  
+    setInfo({ ...info, currentPage: info.currentPage + 1, activeDisabled: true })
+   
   }
+
+
 
   useEffect(() => {
     const parsed = {
@@ -57,14 +81,15 @@ function App() {
         console.log(err);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [info.currentPage, info.disablePrevious, info.disableNext]);
+  }, [info.currentPage])
+
 
   return (
     <div className="App">
       <List data={info.itemsPerPage} />
       <div className="group">
-        <button disabled={info.disablePrevious} onClick={handlePrevious}>Previous</button>
-        <button disabled={info.disableNext} onClick={handleNext}>Next</button>
+        <button ref={btnPrevious} disabled={info.currentPage === 1} onClick={handlePrevious}>Previous</button>
+        <button ref={btnNext} disabled={info.currentPage === info.totalPage} onClick={handleNext} onDoubleClick={() => console.log('DB click')}>Next</button>
       </div>
     </div>
   );
