@@ -98,6 +98,7 @@ function App() {
       <FormSearch propSearch={handleSearch} />
       <List data={info.itemsPerPage} />
       <div className="group">
+  <h1>Page: { info.currentPage }/{ info.totalPage }</h1>
         <button ref={btnPrevious} disabled={info.currentPage === 1} onClick={handlePrevious}>Previous</button>
         <button ref={btnNext} disabled={info.currentPage === info.totalPage} onClick={handleNext} onDoubleClick={() => console.log('DB click')}>Next</button>
       </div>
